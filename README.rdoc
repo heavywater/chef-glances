@@ -1,0 +1,21 @@
+= DESCRIPTION:
+Builds and installs glances 
+https://github.com/nicolargo/glances
+
+= REQUIREMENTS:
+
+= ATTRIBUTES:
+* default[:pystatgrab][:source] = "pystatgrab-0.5.tar.gz"
+* default[:pystatgrab][:dir] = "pystatgrab-0.5"
+* default[:pystatgrab][:uri] = "ftp.uk.i-scream.org/sites/ftp.i-scream.org/pub/i-scream/pystatgrab/pystatgrab-0.5.tar.gz"
+
+* default[:glances][:source] = "glances.tar.gz"
+* default[:glances][:dir] = "glances"
+* default[:glances][:uri] = "github.com/nicolargo/glances/tarball/master"
+
+* default[:destroy] = "1"
+
+= USAGE:
+
+recipe[glances]
+
