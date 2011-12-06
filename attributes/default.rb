@@ -24,4 +24,3 @@ default[:glances][:source] = "glances-1.1.3.tar.gz"
 default[:glances][:dir] = "glances-1.1.3"
 default[:glances][:uri] = "https://github.com/downloads/nicolargo/glances/glances-1.1.3.tar.gz"
 
-default[:destroy] = '1'

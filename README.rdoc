@@ -13,8 +13,6 @@ https://github.com/nicolargo/glances
 * default[:glances][:dir] = "glances"
 * default[:glances][:uri] = "github.com/nicolargo/glances/tarball/master"
 
-* default[:destroy] = "1"
-
 = USAGE:
 
 recipe[glances]
