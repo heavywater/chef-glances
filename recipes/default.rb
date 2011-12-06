@@ -20,10 +20,6 @@ package "build-essential" do
   action :install
 end
 
-package "git-core" do
-  action :install
-end
-
 package "pkg-config" do
   action :install
 end
