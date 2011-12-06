@@ -16,54 +16,55 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 package "build-essential"
 package "pkg-config"
 package "python"
 package "python-dev"
 package "libstatgrab-dev"
 
-remote_file "/tmp/#{node.pystatgrab.source}" do
-  source node.pystatgrab.uri
-  mode "0644"
-  not_if do
-    File.exists?("/tmp/#{node.pystatgrab.source}")
-  end
+remote_file "/usr/src/#{node[:pystatgrab][:source]}" do
+  source node[:pystatgrab][:uri]
+  action :create_if_missing
 end
 
-execute "Exploding pystatgrab archive #{node.pystatgrab.source}" do
-  command "tar zxf #{node.pystatgrab.source}"
-  creates "/tmp/#{node.pystatgrab.dir}"
-  cwd "/tmp"
-  not_if "test -d /tmp/#{node.pystatgrab.dir}"
+execute "pystatgrab: untar #{node[:pystatgrab][:source]}" do
+  command "tar zxf #{node[:pystatgrab][:source]}"
+  creates "/usr/src/#{node[:pystatgrab][:dir]}"
+  cwd "/usr/src"
 end
 
-execute "Install pystatgrab" do
-  command "./setup.py build; sudo ./setup.py install"
-  cwd "/tmp/#{node.pystatgrab.dir}"
-  not_if "test -f /tmp/#{node.pystatgrab.dir}/statgrab.py"
+execute "pystatgrab: build" do
+  command "./setup.py build"
+  creates "/usr/local/lib/python2.7/dist-packages/statgrab.py"
+  cwd "/usr/src/#{node[:pystatgrab][:dir]}"
 end
 
-remote_file "/tmp/#{node.glances.source}" do
-  source node.glances.uri
-  mode "0644"
-  not_if do
-    File.exists?("/tmp/#{node.glances.source}")
-  end
+execute "pystatgrab: install" do
+  command "sudo ./setup.py install"
+  creates "/usr/local/lib/python2.7/dist-packages/statgrab.py"
+  cwd "/usr/src/#{node[:pystatgrab][:dir]}"
 end
 
-execute "Exploding glances archive #{node.glances.source}" do
-  command "tar zxf #{node.glances.source}"
-  creates "/tmp/#{node.glances.dir}"
-  cwd "/tmp"
-  not_if "test -d /tmp/#{node.glances.dir}"
+remote_file "/usr/src/#{node[:glances][:source]}" do
+  source node[:glances][:uri]
+  action :create_if_missing
 end
 
-execute "Install glances" do
-  command "./configure; make; sudo make install"
-  cwd "/tmp/#{node.glances.dir}"
+execute "glances: untar #{node[:glances][:source]}" do
+  command "tar zxf #{node[:glances][:source]}"
+  creates "/usr/src/#{node[:glances][:dir]}"
+  cwd "/usr/src"
 end
 
-execute "Cleaning up" do
-  command "cd /tmp; sudo rm -rf glances*; sudo rm -rf pystatgrab*"
+execute "glances: build" do
+  command "./configure; make;"
+  creates "/usr/local/bin/glances.py"
+  cwd "/usr/src/#{node[:glances][:dir]}"
 end
 
+execute "glances: install" do
+  command "sudo make install"
+  creates "/usr/local/bin/glances.py"
+  cwd "/usr/src/#{node[:glances][:dir]}"
+end
