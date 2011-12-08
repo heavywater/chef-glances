@@ -4,6 +4,8 @@ https://github.com/nicolargo/glances
 
 = REQUIREMENTS:
 
+* Ubuntu 10.04 or higher
+
 = ATTRIBUTES:
 * default[:pystatgrab][:source] = "pystatgrab-0.5.tar.gz"
 * default[:pystatgrab][:dir] = "pystatgrab-0.5"
